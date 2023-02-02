@@ -30,11 +30,20 @@ describe("tests about fruits api", () => {
     it("should return the specific fruit", async () => {
         // GET /fruits/:id
         const result = await supertest(app).get("/fruits/1");
+
         expect(result.body).toMatchObject({
             "id": 1,
             "name": "Banana",
             "price": 1000
         });
+        expect(result.status).toBe(200);
+    });
+
+    it("should return not found when id doesn't exists", async () => {
+        // GET /fruits/:id
+        const result = await supertest(app).get("/fruits/2");
+
+        expect(result.status).toBe(404);
     });
 
     it("should return all the fruits", async () => {
