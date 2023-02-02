@@ -11,6 +11,15 @@ describe("tests about fruits api", () => {
 
         // POST /fruits
         const result = await supertest(app).post("/fruits").send(body);
+        
         expect(result.status).toBe(201);
+    });
+
+    it("should return all the fruits", async () => {
+        // GET /fruits
+        const result = await supertest(app).get("/fruits");
+
+        expect(result.body.length).toBe(1);
+        expect(result.status).toBe(200);
     });
 });
