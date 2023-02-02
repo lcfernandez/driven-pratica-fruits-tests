@@ -27,6 +27,16 @@ describe("tests about fruits api", () => {
         expect(result.status).toBe(409);
     });
 
+    it("should return the specific fruit", async () => {
+        // GET /fruits/:id
+        const result = await supertest(app).get("/fruits/1");
+        expect(result.body).toMatchObject({
+            "id": 1,
+            "name": "Banana",
+            "price": 1000
+        });
+    });
+
     it("should return all the fruits", async () => {
         // GET /fruits
         const result = await supertest(app).get("/fruits");
