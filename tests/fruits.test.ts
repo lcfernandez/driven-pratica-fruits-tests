@@ -15,7 +15,7 @@ describe("tests about fruits api", () => {
         expect(result.status).toBe(201);
     });
 
-    it("should return conflict when repeat a fruit", async () => {
+    it("should return conflict when repeat a fruit name (case sensitive)", async () => {
         const body: FruitInput = {
             "name": "Banana",
             "price": 1000
@@ -27,7 +27,19 @@ describe("tests about fruits api", () => {
         expect(result.status).toBe(409);
     });
 
-    it("should return the specific fruit", async () => {
+    it("should return conflict when repeat a fruit name (case insensitive)", async () => {
+        const body: FruitInput = {
+            "name": "banana",
+            "price": 1000
+        };
+
+        // POST /fruits
+        const result = await supertest(app).post("/fruits").send(body);
+        
+        expect(result.status).toBe(409);
+    });
+
+    it("should return specific fruit", async () => {
         // GET /fruits/:id
         const result = await supertest(app).get("/fruits/1");
 
@@ -41,16 +53,24 @@ describe("tests about fruits api", () => {
 
     it("should return not found when id doesn't exists", async () => {
         // GET /fruits/:id
-        const result = await supertest(app).get("/fruits/2");
+        const result = await supertest(app).get("/fruits/3");
 
         expect(result.status).toBe(404);
     });
 
-    it("should return all the fruits", async () => {
+    it("should return all valid fruits", async () => {
+        const body: FruitInput = {
+            "name": "Apple",
+            "price": 2000
+        };
+
+        // POST /fruits
+        await supertest(app).post("/fruits").send(body);
+
         // GET /fruits
         const result = await supertest(app).get("/fruits");
 
-        expect(result.body.length).toBe(1);
+        expect(result.body.length).toBe(2);
         expect(result.status).toBe(200);
     });
 });
