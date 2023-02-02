@@ -15,6 +15,18 @@ describe("tests about fruits api", () => {
         expect(result.status).toBe(201);
     });
 
+    it("should return conflict when repeat a fruit", async () => {
+        const body: FruitInput = {
+            "name": "Banana",
+            "price": 1000
+        };
+
+        // POST /fruits
+        const result = await supertest(app).post("/fruits").send(body);
+        
+        expect(result.status).toBe(409);
+    });
+
     it("should return all the fruits", async () => {
         // GET /fruits
         const result = await supertest(app).get("/fruits");
